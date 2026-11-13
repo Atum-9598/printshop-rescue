@@ -4,120 +4,271 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Open Old Print Shop Files</title>
-<meta name="description" content="See your old Print Shop Deluxe and Ensemble cards, signs and banners again. Free preview in your browser — your file never leaves your computer. Printable PDF on request.">
+<meta name="description" content="See your old Print Shop Deluxe and Ensemble cards, signs and banners again. Free preview right in your browser — your files never leave your computer. Print-ready PDFs on request.">
+<link rel="canonical" href="https://atum-9598.github.io/printshop-rescue/">
+<meta property="og:title" content="Open Old Print Shop Files">
+<meta property="og:description" content="Your '90s Print Shop cards and signs, back on screen. Free preview, nothing uploaded.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='1' y='1' width='14' height='14' fill='%23000080'/%3E%3Crect x='4' y='1' width='8' height='5' fill='%23c0c0c0'/%3E%3Crect x='9' y='2' width='2' height='3' fill='%23000080'/%3E%3Crect x='3' y='8' width='10' height='6' fill='%23fff'/%3E%3C/svg%3E">
 <style>
   :root {
-    --bg: #fbf8f3; --card: #ffffff; --ink: #1f2328; --muted: #5b616b;
-    --accent: #b4361f; --accent-ink: #ffffff; --line: #e4ddd2; --drop: #fff4e8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #17181b; --card: #212227; --ink: #ecebe8; --muted: #a3a6ad;
-      --accent: #ff7a5c; --accent-ink: #17181b; --line: #34363d; --drop: #2a2420;
-    }
+    --desk: #008080;
+    --face: #c0c0c0; --hi: #ffffff; --lo: #808080; --dk: #000000;
+    --title1: #000080; --title2: #1084d0;
+    --ink: #000000; --muted: #3a3a3a; --paper: #ffffff; --link: #0000ee;
+    --sel: #000080;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink);
-         font: 19px/1.6 Georgia, "Times New Roman", serif; }
-  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
-  h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 .4em; }
-  h2 { font-size: 1.35rem; margin: 2em 0 .5em; }
+  html { background: var(--desk); }
+  body {
+    margin: 0; color: var(--ink); background: var(--desk);
+    font: 18px/1.6 Verdana, Tahoma, "DejaVu Sans", sans-serif;
+  }
+  a { color: var(--link); }
+
+  /* ---- 3D bevels, the way 1995 did it ---- */
+  .raised { background: var(--face);
+    box-shadow: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--lo), inset 2px 2px #dfdfdf; }
+  .sunken { background: var(--paper);
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--lo), inset -2px -2px #dfdfdf, inset 2px 2px var(--dk); }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 28px 16px 40px; }
+
+  .window { padding: 3px; }
+  .titlebar {
+    display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px;
+    background: linear-gradient(90deg, var(--title1), var(--title2)); color: #fff;
+    font-weight: bold; font-size: 15px; letter-spacing: .2px;
+  }
+  .titlebar .t { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .titlebar svg { flex: none; }
+  .tbtn { width: 22px; height: 20px; display: grid; place-items: center; color: #000; font: bold 12px/1 Verdana, sans-serif; }
+  .menubar { display: flex; gap: 2px; padding: 3px 4px; font-size: 15px; flex-wrap: wrap; }
+  .menubar a { color: #000; text-decoration: none; padding: 2px 9px; }
+  .menubar a:hover, .menubar a:focus { background: var(--sel); color: #fff; outline: none; }
+  .menubar a span { text-decoration: underline; }
+
+  .doc { margin: 2px 2px 0; padding: 32px 36px 36px; }
+  @media (max-width: 560px) { .doc { padding: 22px 16px 26px; } body { font-size: 17px; } }
+
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.3rem; line-height: 1.15; margin: 0 0 .35em; color: var(--title1); }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.5rem; margin: 0 0 .5em; color: var(--title1); }
   p { margin: 0 0 1em; }
-  .lead { font-size: 1.15rem; color: var(--muted); }
-  #drop { display: block; border: 3px dashed var(--accent); background: var(--drop); border-radius: 14px;
-          padding: 36px 20px; text-align: center; cursor: pointer; margin: 28px 0; }
-  #drop.over { background: var(--card); }
-  #drop strong { display: block; font-size: 1.3rem; margin-bottom: .3em; }
-  #drop input { display: none; }
-  .btn { display: inline-block; background: var(--accent); color: var(--accent-ink); padding: .55em 1.1em;
-         border-radius: 8px; font-weight: bold; text-decoration: none; font-family: inherit; font-size: 1rem; border: 0; }
-  #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-  .item { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; }
-  .item canvas { width: 100%; height: auto; image-rendering: pixelated; background: #fff; }
-  .item .name { font-size: .85rem; color: var(--muted); word-break: break-all; margin: .4em 0; }
-  .item .err { font-size: .9rem; color: var(--accent); }
-  .box { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 28px 0; }
-  .price { display: flex; gap: 16px; flex-wrap: wrap; margin: 1em 0; }
-  .price div { flex: 1 1 200px; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
-  .price b { font-size: 1.5rem; display: block; }
-  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9em; }
-  details { border-top: 1px solid var(--line); padding: .7em 0; }
+  .lead { font-size: 1.08rem; }
+  .kicker { font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--lo); margin-bottom: .6em; font-weight: bold; }
+  section { margin-top: 44px; }
+
+  /* ---- Buttons ---- */
+  .btn { display: inline-block; min-width: 120px; padding: 7px 18px; color: #000; text-decoration: none; cursor: pointer;
+         font: bold 16px Verdana, Tahoma, sans-serif; text-align: center; border: 0; }
+  .btn:active { box-shadow: inset 1px 1px var(--dk), inset -1px -1px var(--hi), inset 2px 2px var(--lo); padding: 8px 17px 6px 19px; }
+  .btn:focus-visible { outline: 1px dotted #000; outline-offset: -6px; }
+
+  /* ---- Open-file dialog / drop zone ---- */
+  .dialog { margin: 28px 0 8px; padding: 3px; }
+  .dialog .titlebar { font-size: 14px; }
+  .dialog-body { padding: 18px; }
+  #drop { display: flex; gap: 20px; align-items: center; padding: 22px; cursor: pointer; margin-bottom: 14px; }
+  #drop.over { background: #ffffe1; outline: 2px dashed var(--title1); outline-offset: -8px; }
+  #drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  #drop strong { display: block; font-size: 1.15rem; margin-bottom: 4px; }
+  #drop .sub { color: var(--muted); font-size: 15px; }
+  .dialog-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; align-items: center; }
+  .dialog-actions .note { flex: 1; font-size: 14px; color: var(--muted); min-width: 200px; }
+  @media (max-width: 560px) { #drop { flex-direction: column; text-align: center; } }
+
+  /* ---- Results ---- */
+  #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 18px; }
+  #results:empty { display: none; }
+  .item { padding: 3px; }
+  .item .cap { padding: 3px 6px; font-size: 13px; font-weight: bold; color: #fff;
+               background: linear-gradient(90deg, var(--title1), var(--title2));
+               white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item .pic { margin: 4px; padding: 6px; text-align: center; }
+  .item canvas, .item img { width: 100%; height: auto; image-rendering: pixelated; display: block; }
+  .item .err { font-size: 14px; color: #a00000; padding: 8px 2px; }
+  #after { display: none; margin-top: 16px; padding: 14px 16px; background: #ffffe1; border: 1px solid #000; font-size: 16px; }
+
+  /* ---- Steps ---- */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; counter-reset: s; }
+  @media (max-width: 680px) { .steps { grid-template-columns: 1fr; } }
+  .step { padding: 16px 16px 12px; }
+  .step b { display: block; font-family: Georgia, serif; font-size: 1.15rem; color: var(--title1); margin-bottom: 4px; }
+  .step b::before { counter-increment: s; content: counter(s) ". "; }
+  .step p { font-size: 15.5px; margin: 0; }
+
+  /* ---- Pricing ---- */
+  .prices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+  @media (max-width: 560px) { .prices { grid-template-columns: 1fr; } }
+  .price { padding: 3px; }
+  .price .inner { padding: 16px 18px; }
+  .price .amt { font-family: Georgia, serif; font-size: 2.1rem; color: var(--title1); line-height: 1.1; }
+  .price .what { font-weight: bold; }
+  .price .small { font-size: 14.5px; color: var(--muted); margin: 6px 0 0; }
+  .promise { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; margin: 0 0 16px; }
+  .promise p { margin: 0; }
+
+  /* ---- File types table ---- */
+  table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #d4d4d4; vertical-align: top; }
+  th { background: var(--face); font-weight: bold; box-shadow: inset -1px -1px var(--lo), inset 1px 1px var(--hi); border: 0; }
+  code { font-family: "Courier New", Courier, monospace; font-size: .98em; font-weight: bold; }
+  .tbl { padding: 2px; overflow-x: auto; }
+
+  /* ---- FAQ ---- */
+  details { padding: 12px 2px; border-bottom: 1px solid #d4d4d4; }
   summary { cursor: pointer; font-weight: bold; }
-  footer { margin-top: 48px; font-size: .85rem; color: var(--muted); }
-  #hidden { display: none; }
+  details p { margin: .6em 0 0; font-size: 16px; }
+
+  /* ---- Status bar ---- */
+  .statusbar { display: flex; gap: 3px; margin: 3px 2px 2px; font-size: 13.5px; flex-wrap: wrap; }
+  .statusbar div { padding: 2px 8px; flex: 1 1 auto;
+                   box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--lo); }
+  .foot { color: #e8ffff; font-size: 13px; text-align: center; margin-top: 18px; line-height: 1.5; }
+  .foot a { color: #fff; }
 </style>
 </head>
 <body>
-<main>
-  <h1>See your old Print Shop cards again</h1>
-  <p class="lead">Made birthday cards, signs or banners in <b>The Print Shop Deluxe</b> (up to version 6) or <b>Print Shop Ensemble</b> back in the '90s? New computers can't open those files anymore. Drop them here and see them again — free.</p>
-
-  <label id="drop">
-    <strong>Drop your old Print Shop files here</strong>
-    or <span class="btn">choose files</span>
-    <input id="pick" type="file" multiple>
-    <p style="margin:.8em 0 0;font-size:.9rem;color:var(--muted)">Your files stay on your computer. Nothing is uploaded.</p>
-  </label>
-
-  <div id="results"></div>
-
-  <div class="box" id="offer">
-    <h2 style="margin-top:0">Want them sharp and printable?</h2>
-    <p>The free preview is small. We rebuild your projects at full quality — real fonts, crisp pictures — as PDF files you can print or email.</p>
-    <div class="price">
-      <div><b>15 €</b>up to 5 files</div>
-      <div><b>39 €</b>a whole folder (up to 100 files)</div>
+<div class="wrap">
+  <div class="window raised">
+    <div class="titlebar">
+      <svg width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="#c0c0c0"/><rect x="2" y="2" width="12" height="12" fill="#000080"/><rect x="4" y="2" width="8" height="5" fill="#c0c0c0"/><rect x="9" y="3" width="2" height="3" fill="#000080"/><rect x="4" y="9" width="8" height="5" fill="#fff"/></svg>
+      <span class="t">Print Shop Rescue — Open Old Files</span>
+      <span class="tbtn raised" aria-hidden="true">_</span><span class="tbtn raised" aria-hidden="true">□</span><span class="tbtn raised" aria-hidden="true">×</span>
     </div>
-    <p><b>If we can't convert a file, you don't pay for it.</b></p>
-    <p>Email your files to <a href="mailto:osirth92b@gmail.com">osirth92b@gmail.com</a> and we'll reply with a free sample page first.</p>
+    <nav class="menubar" aria-label="Sections">
+      <a href="#open"><span>O</span>pen</a><a href="#how"><span>H</span>ow it works</a><a href="#prices"><span>P</span>rices</a><a href="#files"><span>F</span>ile types</a><a href="#faq"><span>Q</span>uestions</a>
+    </nav>
+
+    <main class="doc sunken">
+      <div class="kicker">Rescue service for '90s Print Shop files</div>
+      <h1>See your old Print Shop cards again</h1>
+      <p class="lead">Birthday cards, church newsletters, garage-sale signs, banners — made in <b>The Print Shop Deluxe</b> (up to version 6) or <b>The Print Shop Ensemble</b>. Today's computers can't open them anymore. We can.</p>
+
+      <div class="dialog raised" id="open">
+        <div class="titlebar"><span class="t">Open — free preview</span></div>
+        <div class="dialog-body">
+          <label id="drop" class="sunken">
+            <svg width="64" height="64" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true" style="flex:none">
+              <rect x="1" y="1" width="14" height="14" fill="#000"/><rect x="2" y="2" width="12" height="12" fill="#2a2aa8"/>
+              <rect x="4" y="2" width="8" height="5" fill="#d8d8d8"/><rect x="9" y="3" width="2" height="3" fill="#2a2aa8"/>
+              <rect x="3" y="9" width="10" height="5" fill="#fff"/><rect x="4" y="10" width="8" height="1" fill="#9a9a9a"/><rect x="4" y="12" width="6" height="1" fill="#9a9a9a"/>
+            </svg>
+            <div>
+              <strong>Drop your old Print Shop files here</strong>
+              <span class="sub">or click to browse. You can select a whole folder's worth at once.</span>
+            </div>
+            <input id="pick" type="file" multiple>
+          </label>
+          <div class="dialog-actions">
+            <span class="note">🔒 Your files stay on your computer. Nothing is uploaded.</span>
+            <label for="pick" class="btn raised">Open…</label>
+          </div>
+          <div id="results" aria-live="polite"></div>
+          <div id="after">That's your file! These previews are small. For <b>sharp, print-ready copies</b>, see <a href="#prices">prices</a> below — we'll send you one finished page free first.</div>
+        </div>
+      </div>
+
+      <section id="how">
+        <h2>How it works</h2>
+        <div class="steps">
+          <div class="step raised"><b>Preview — free</b><p>Drop your files above. You'll see a small picture of each one, right here, in seconds.</p></div>
+          <div class="step raised"><b>Email us</b><p>Send the files you want rescued. We reply with one finished page free, so you can see the quality.</p></div>
+          <div class="step raised"><b>Get your PDFs</b><p>Happy with it? Pay, and get every project back as a sharp PDF to print, email or keep.</p></div>
+        </div>
+      </section>
+
+      <section id="prices">
+        <h2>Prices</h2>
+        <div class="promise sunken">
+          <span aria-hidden="true" style="font-size:26px;line-height:1">✔</span>
+          <p><b>You see a finished page before you pay anything.</b> And if we can't rescue a file, you don't pay for it.</p>
+        </div>
+        <div class="prices">
+          <div class="price raised"><div class="inner">
+            <div class="amt">15 €</div><div class="what">Up to 5 files</div>
+            <p class="small">A few favourite cards or signs.</p>
+          </div></div>
+          <div class="price raised"><div class="inner">
+            <div class="amt">39 €</div><div class="what">A whole folder — up to 100 files</div>
+            <p class="small">Years of cards, calendars and newsletters.</p>
+          </div></div>
+        </div>
+        <p>Send your files to <a href="mailto:osirth92b@gmail.com?subject=Print%20Shop%20rescue">osirth92b@gmail.com</a>. Zip them up if there are many. We usually reply within a day or two.</p>
+        <p><a class="btn raised" href="mailto:osirth92b@gmail.com?subject=Print%20Shop%20rescue">Email my files</a></p>
+      </section>
+
+      <section id="files">
+        <h2>Which files work?</h2>
+        <div class="tbl sunken">
+          <table>
+            <thead><tr><th>Program</th><th>File endings</th><th>Free preview</th><th>Print-ready PDF</th></tr></thead>
+            <tbody>
+              <tr><td>The Print Shop Ensemble II &amp; III<br>The Print Shop Deluxe (Windows, early versions)</td>
+                  <td><code>.GRM .SRM .BRM .LRM .CRM .ERM .PRM .ORM .BCR .PCR</code></td><td>✔ Yes</td><td>✔ Yes</td></tr>
+              <tr><td>The Print Shop Deluxe 5 &amp; 6</td>
+                  <td><code>.PDS .PDG .PDL .PDB .PDA</code></td><td>✔ Yes</td><td>Coming soon — email us</td></tr>
+              <tr><td>PrintMaster, Print Shop 10 and later</td>
+                  <td>various</td><td>Not yet</td><td>Email us — we're adding more</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px;font-size:15.5px">Not sure? Just drop the file in the box above — it will tell you.</p>
+      </section>
+
+      <section id="faq">
+        <h2>Questions</h2>
+        <details><summary>Is the preview really free? Do I have to sign up?</summary><p>Yes, and no sign-up. The preview runs inside your own web browser — your file is never sent anywhere.</p></details>
+        <details><summary>Why can't my computer open these files anymore?</summary><p>The programs that made them stopped working on modern Windows and Mac, and newer Print Shop versions can't read the oldest files.</p></details>
+        <details><summary>Where are my old files?</summary><p>Look on old floppy disks, CDs, or an old computer's hard drive — often in a folder named <code>PSDWIN</code>, <code>PSHOP</code>, or <code>My Documents</code>. Search for the file endings listed above.</p></details>
+        <details><summary>What do I get back?</summary><p>A PDF for each project — full quality, with the original pictures and lettering, ready to print at home or at a print shop, or to share by email.</p></details>
+        <details><summary>Do I need to install anything?</summary><p>No. This page for the preview, and email for everything else.</p></details>
+      </section>
+    </main>
+
+    <div class="statusbar" role="contentinfo">
+      <div>Ready</div><div>100% private preview</div><div>No sign-up</div>
+    </div>
   </div>
 
-  <h2>Which files work?</h2>
-  <p>Project files from The Print Shop Deluxe (Windows, including versions 5 and 6) and The Print Shop Ensemble II &amp; III, for example:</p>
-  <p><code>.GRM</code> greeting cards · <code>.SRM</code> signs · <code>.BRM</code> banners · <code>.LRM</code> letterheads · <code>.CRM</code> calendars · <code>.ERM</code> envelopes · <code>.PRM</code> postcards · <code>.BCR</code> business cards · <code>.PCR</code> certificates · <code>.ORM</code> · <code>.PDS</code> · <code>.PDG</code> · <code>.PDL</code> · <code>.PDB</code> · <code>.PDA</code> (Deluxe 5 &amp; 6)</p>
-  <p>Other versions (Print Shop 10+, PrintMaster)? Email us anyway — we're adding more all the time.</p>
-
-  <h2>Questions</h2>
-  <details><summary>Is the preview really free?</summary><p>Yes. It runs inside your web browser. Your file is never sent anywhere.</p></details>
-  <details><summary>Why can't I open these files anymore?</summary><p>The programs that made them stopped working on modern Windows and Mac, and newer Print Shop versions can't read the oldest files.</p></details>
-  <details><summary>Do I need to install anything?</summary><p>No. Just this page for the preview, and email for the full-quality PDFs.</p></details>
-
-  <footer>
-    <p>Independent rescue service. Not affiliated with or endorsed by Broderbund or its owners. "The Print Shop" is a trademark of its respective owner and is used here only to describe which files we can read.</p>
-  </footer>
-</main>
+  <p class="foot">Print Shop Rescue is an independent service, not affiliated with or endorsed by Broderbund or its owners.<br>“The Print Shop” and “PrintMaster” are trademarks of their respective owners, used here only to describe which files we can read.</p>
+</div>
 
 <script src="psprev.js"></script>
 <script>
-  const drop = document.getElementById('drop'), pick = document.getElementById('pick'), results = document.getElementById('results');
+  const drop = document.getElementById('drop'), pick = document.getElementById('pick'),
+        results = document.getElementById('results'), after = document.getElementById('after');
+  const count = p => { if (window.goatcounter && goatcounter.count) goatcounter.count({ path: p, event: true }); };
+  function card(file) {
+    const item = document.createElement('div'); item.className = 'item raised';
+    const cap = document.createElement('div'); cap.className = 'cap'; cap.textContent = file.name; cap.title = file.name;
+    const pic = document.createElement('div'); pic.className = 'pic sunken';
+    item.append(cap, pic); results.appendChild(item);
+    return pic;
+  }
   function show(file) {
-    const item = document.createElement('div'); item.className = 'item';
-    const name = document.createElement('div'); name.className = 'name'; name.textContent = file.name;
-    results.appendChild(item);
+    const pic = card(file);
     file.arrayBuffer().then(buf => {
+      const bytes = new Uint8Array(buf);
       try {
-        const img = PSPrev.decode(new Uint8Array(buf));
+        const img = PSPrev.decode(bytes);
         const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
         c.getContext('2d').putImageData(new ImageData(img.rgba, img.width, img.height), 0, 0);
-        item.appendChild(c);
-        if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'preview-ok', event: true });
+        pic.appendChild(c); after.style.display = 'block'; count('preview-ok');
       } catch (e) {
-        const bmp = PSPrev.findBmp(new Uint8Array(buf));
+        const bmp = PSPrev.findBmp(bytes);
         if (bmp) {
-          const im = document.createElement('img'); im.style.width = '100%'; im.style.imageRendering = 'pixelated';
-          im.alt = 'Preview of ' + file.name;
+          const im = document.createElement('img'); im.alt = 'Preview of ' + file.name;
           im.src = URL.createObjectURL(new Blob([bmp], { type: 'image/bmp' }));
-          item.appendChild(im); item.appendChild(name);
-          if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'preview-ok-d6', event: true });
+          pic.appendChild(im); after.style.display = 'block'; count('preview-ok-d6');
           return;
         }
-        const er = document.createElement('div'); er.className = 'err'; er.textContent = e.message; item.appendChild(er);
-        if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'preview-fail', event: true });
+        const er = document.createElement('div'); er.className = 'err'; er.textContent = e.message;
+        pic.appendChild(er); count('preview-fail');
       }
-      item.appendChild(name);
     });
   }
-  function handle(files) { [...files].slice(0, 200).forEach(show); results.scrollIntoView({ behavior: 'smooth' }); }
+  function handle(files) { [...files].slice(0, 200).forEach(show); results.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
   pick.addEventListener('change', () => handle(pick.files));
   ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
   ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
