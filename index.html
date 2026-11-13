@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Old Print Shop Files</title>
+<meta name="description" content="See your old Print Shop Deluxe and Ensemble cards, signs and banners again. Free preview in your browser — your file never leaves your computer. Printable PDF on request.">
+<style>
+  :root {
+    --bg: #fbf8f3; --card: #ffffff; --ink: #1f2328; --muted: #5b616b;
+    --accent: #b4361f; --accent-ink: #ffffff; --line: #e4ddd2; --drop: #fff4e8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17181b; --card: #212227; --ink: #ecebe8; --muted: #a3a6ad;
+      --accent: #ff7a5c; --accent-ink: #17181b; --line: #34363d; --drop: #2a2420;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 19px/1.6 Georgia, "Times New Roman", serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 .4em; }
+  h2 { font-size: 1.35rem; margin: 2em 0 .5em; }
+  p { margin: 0 0 1em; }
+  .lead { font-size: 1.15rem; color: var(--muted); }
+  #drop { display: block; border: 3px dashed var(--accent); background: var(--drop); border-radius: 14px;
+          padding: 36px 20px; text-align: center; cursor: pointer; margin: 28px 0; }
+  #drop.over { background: var(--card); }
+  #drop strong { display: block; font-size: 1.3rem; margin-bottom: .3em; }
+  #drop input { display: none; }
+  .btn { display: inline-block; background: var(--accent); color: var(--accent-ink); padding: .55em 1.1em;
+         border-radius: 8px; font-weight: bold; text-decoration: none; font-family: inherit; font-size: 1rem; border: 0; }
+  #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .item { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; }
+  .item canvas { width: 100%; height: auto; image-rendering: pixelated; background: #fff; }
+  .item .name { font-size: .85rem; color: var(--muted); word-break: break-all; margin: .4em 0; }
+  .item .err { font-size: .9rem; color: var(--accent); }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 28px 0; }
+  .price { display: flex; gap: 16px; flex-wrap: wrap; margin: 1em 0; }
+  .price div { flex: 1 1 200px; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .price b { font-size: 1.5rem; display: block; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9em; }
+  details { border-top: 1px solid var(--line); padding: .7em 0; }
+  summary { cursor: pointer; font-weight: bold; }
+  footer { margin-top: 48px; font-size: .85rem; color: var(--muted); }
+  #hidden { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>See your old Print Shop cards again</h1>
+  <p class="lead">Made birthday cards, signs or banners in <b>The Print Shop Deluxe</b> (up to version 6) or <b>Print Shop Ensemble</b> back in the '90s? New computers can't open those files anymore. Drop them here and see them again — free.</p>
+
+  <label id="drop">
+    <strong>Drop your old Print Shop files here</strong>
+    or <span class="btn">choose files</span>
+    <input id="pick" type="file" multiple>
+    <p style="margin:.8em 0 0;font-size:.9rem;color:var(--muted)">Your files stay on your computer. Nothing is uploaded.</p>
+  </label>
+
+  <div id="results"></div>
+
+  <div class="box" id="offer">
+    <h2 style="margin-top:0">Want them sharp and printable?</h2>
+    <p>The free preview is small. We rebuild your projects at full quality — real fonts, crisp pictures — as PDF files you can print or email.</p>
+    <div class="price">
+      <div><b>15 €</b>up to 5 files</div>
+      <div><b>39 €</b>a whole folder (up to 100 files)</div>
+    </div>
+    <p><b>If we can't convert a file, you don't pay for it.</b></p>
+    <p>Email your files to <a href="mailto:osirth92b@gmail.com">osirth92b@gmail.com</a> and we'll reply with a free sample page first.</p>
+  </div>
+
+  <h2>Which files work?</h2>
+  <p>Project files from The Print Shop Deluxe (Windows, including versions 5 and 6) and The Print Shop Ensemble II &amp; III, for example:</p>
+  <p><code>.GRM</code> greeting cards · <code>.SRM</code> signs · <code>.BRM</code> banners · <code>.LRM</code> letterheads · <code>.CRM</code> calendars · <code>.ERM</code> envelopes · <code>.PRM</code> postcards · <code>.BCR</code> business cards · <code>.PCR</code> certificates · <code>.ORM</code> · <code>.PDS</code> · <code>.PDG</code> · <code>.PDL</code> · <code>.PDB</code> · <code>.PDA</code> (Deluxe 5 &amp; 6)</p>
+  <p>Other versions (Print Shop 10+, PrintMaster)? Email us anyway — we're adding more all the time.</p>
+
+  <h2>Questions</h2>
+  <details><summary>Is the preview really free?</summary><p>Yes. It runs inside your web browser. Your file is never sent anywhere.</p></details>
+  <details><summary>Why can't I open these files anymore?</summary><p>The programs that made them stopped working on modern Windows and Mac, and newer Print Shop versions can't read the oldest files.</p></details>
+  <details><summary>Do I need to install anything?</summary><p>No. Just this page for the preview, and email for the full-quality PDFs.</p></details>
+
+  <footer>
+    <p>Independent rescue service. Not affiliated with or endorsed by Broderbund or its owners. "The Print Shop" is a trademark of its respective owner and is used here only to describe which files we can read.</p>
+  </footer>
+</main>
+
+<script src="psprev.js"></script>
+<script>
+  const drop = document.getElementById('drop'), pick = document.getElementById('pick'), results = document.getElementById('results');
+  function show(file) {
+    const item = document.createElement('div'); item.className = 'item';
+    const name = document.createElement('div'); name.className = 'name'; name.textContent = file.name;
+    results.appendChild(item);
+    file.arrayBuffer().then(buf => {
+      try {
+        const img = PSPrev.decode(new Uint8Array(buf));
+        const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+        c.getContext('2d').putImageData(new ImageData(img.rgba, img.width, img.height), 0, 0);
+        item.appendChild(c);
+        if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'preview-ok', event: true });
+      } catch (e) {
+        const bmp = PSPrev.findBmp(new Uint8Array(buf));
+        if (bmp) {
+          const im = document.createElement('img'); im.style.width = '100%'; im.style.imageRendering = 'pixelated';
+          im.alt = 'Preview of ' + file.name;
+          im.src = URL.createObjectURL(new Blob([bmp], { type: 'image/bmp' }));
+          item.appendChild(im); item.appendChild(name);
+          if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'preview-ok-d6', event: true });
+          return;
+        }
+        const er = document.createElement('div'); er.className = 'err'; er.textContent = e.message; item.appendChild(er);
+        if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'preview-fail', event: true });
+      }
+      item.appendChild(name);
+    });
+  }
+  function handle(files) { [...files].slice(0, 200).forEach(show); results.scrollIntoView({ behavior: 'smooth' }); }
+  pick.addEventListener('change', () => handle(pick.files));
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => handle(e.dataTransfer.files));
+</script>
+<!-- Visit counter (free, no cookies): replace CODE with your GoatCounter name, then uncomment.
+<script data-goatcounter="https://CODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+-->
+</body>
+</html>
